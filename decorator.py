@@ -1,3 +1,10 @@
+# decorator.py
+#
+# Part of T1nk-R's Custom Object Property Manager
+#
+# This module contains the presentation layer of the add-on
+
+
 import bpy
 from bpy.props import StringProperty, BoolProperty
 from . import decoratorworker
@@ -66,7 +73,7 @@ class DecoratorPanel(bpy.types.Panel):
     # Blender-specific stuff
     bl_idname = "OBJECT_PT_t1nker_decorator_panel"
     bl_label = "Object Custom Property Manager (T1nk-R Utilities)"    
-    bl_description = "Add/remove custom object properties to control export"
+    bl_description = "Add, edit or remove custom object properties"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_category = "T1nk-R Utils"  # this is going to be the name of the tab
@@ -139,16 +146,16 @@ class DecoratorPanel(bpy.types.Panel):
         col.label(text="Remove property")        
         
         col = row.column(align=True)
-        col.operator("t1nker.trainzexporter_decorator_add", text="Set", icon="ADD")
-        col.operator("t1nker.trainzexporter_decorator_extend", text="Extend", icon="FULLSCREEN_ENTER")
-        col.operator("t1nker.trainzexporter_decorator_reset", text="Reset", icon="FILE_REFRESH")        
-        col.operator("t1nker.trainzexporter_decorator_remove", text="Remove", icon="REMOVE")
+        col.operator("t1nker.object_property_manager_add", text="Set", icon="ADD")
+        col.operator("t1nker.object_property_manager_extend", text="Extend", icon="FULLSCREEN_ENTER")
+        col.operator("t1nker.object_property_manager_reset", text="Reset", icon="FILE_REFRESH")        
+        col.operator("t1nker.object_property_manager_remove", text="Remove", icon="REMOVE")
         
 
 # Operator to add a custom object property with a custom default value
 class OBJECT_OT_DecoratorAdd(bpy.types.Operator):    
     """Add the custom object property to objects. If the property exists for an object, its value will be reset to the value specified above"""
-    bl_idname = "t1nker.trainzexporter_decorator_add"
+    bl_idname = "t1nker.object_property_manager_add"
     bl_label = "Add custom object property"
     bl_options = {'REGISTER', 'UNDO'}    
     
@@ -182,7 +189,7 @@ class OBJECT_OT_DecoratorAdd(bpy.types.Operator):
 # Operator to add a custom object property with a custom default value
 class OBJECT_OT_DecoratorExtend(bpy.types.Operator):    
     """Add the custom object property to objects currently not having it. If the property exists for an object, its value won't be changed"""
-    bl_idname = "t1nker.trainzexporter_decorator_extend"
+    bl_idname = "t1nker.object_property_manager_extend"
     bl_label = "Extend custom object property"
     bl_options = {'REGISTER', 'UNDO'}    
     
@@ -216,7 +223,7 @@ class OBJECT_OT_DecoratorExtend(bpy.types.Operator):
 # Operator to remove a custom object property
 class OBJECT_OT_DecoratorReset(bpy.types.Operator):    
     """Reset the custom object property to the value specified above. Only objects having this property will be affected. If an object does not have this property now, it won't be added"""
-    bl_idname = "t1nker.trainzexporter_decorator_reset"
+    bl_idname = "t1nker.object_property_manager_reset"
     bl_label = "Reset custom object property"
     bl_options = {'REGISTER', 'UNDO'}    
     
@@ -263,7 +270,7 @@ class OBJECT_OT_DecoratorReset(bpy.types.Operator):
 # Operator to remove a custom object property
 class OBJECT_OT_DecoratorRemove(bpy.types.Operator):    
     """Remove the custom object property named above"""
-    bl_idname = "t1nker.trainzexporter_decorator_remove"
+    bl_idname = "t1nker.object_property_manager_remove"
     bl_label = "Remove custom object property"
     bl_options = {'REGISTER', 'UNDO'}    
     

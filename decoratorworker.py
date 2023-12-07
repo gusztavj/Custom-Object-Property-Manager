@@ -1,3 +1,9 @@
+# decoratorworker.py
+#
+# Part of T1nk-R's Custom Object Property Manager
+#
+# This module contains business logic for the add-on
+
 from enum import Enum
 import bpy
 
