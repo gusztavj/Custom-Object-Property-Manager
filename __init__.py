@@ -27,7 +27,7 @@ bl_info = {
     "version": (1, 0, 1),
     "blender": (3, 3, 0),
     "location": "View3D > Sidebar (N) > T1nk-R Utils",
-    "description": "You can use this add-on to add, edit and remove custom object properties in batches.# ",
+    "description": "You can use this add-on to add, edit and remove custom object properties in batches.",
     "category": "Object",
     "doc_url": "https://github.com/gusztavj/Custom-Object-Property-Manager",
 }
