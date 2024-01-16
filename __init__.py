@@ -35,11 +35,13 @@
 # no matter what happens. Still I tried to make sure no weird things happen:
 #   * This add-on may add and delete custom object properties based on your instructions.
 #   * This add-on is not intended to modify your objects and other Blender assets in any other way.
+#   * You shall be able to simply undo consequences made by this add-on.
 #
 # You may learn more about legal matters on page https://github.com/gusztavj/Custom-Object-Property-Manager
 #
 # *********************************************************************************************************************************
 
+# Blender-specific properties #####################################################################################################
 
 bl_info = {
     "name": "T1nk-R Custom Object Property Manager",
@@ -52,9 +54,13 @@ bl_info = {
     "doc_url": "https://github.com/gusztavj/Custom-Object-Property-Manager",
 }
 
+# Lifecycle management ############################################################################################################
+
+# Reimport libraries to make sure everything is up to date
 if "bpy" in locals():
     from importlib import reload
 
+    # Our own libraries
     libs = [decorator, decoratorworker]
     
     for lib in libs:        
@@ -65,12 +71,13 @@ if "bpy" in locals():
     
     del reload
 
+# Library imports -----------------------------------------------------------------------------------------------------------------
 import bpy
 from . import decorator
 from . import decoratorworker
 
+# Properties ######################################################################################################################
 
-# Class registry
 classes = [
     decorator.DecoratorSettings,
     decorator.DecoratorPanel,
@@ -79,9 +86,18 @@ classes = [
     decorator.OBJECT_OT_DecoratorReset,
     decorator.OBJECT_OT_DecoratorRemove
 ]
+"""
+List of classes that need to be registered by Blender
+"""
 
-# Register the plugin
+# Functions #######################################################################################################################
+
+# Register the plugin -------------------------------------------------------------------------------------------------------------
 def register():
+    """
+    Register classes and create add-on specific settings upon enabling the add-on. Settings are created in the current scene of 
+    your Blender file and therefore travel with your file.
+    """
     
     # Make sure to avoid double registration
     unregister()
@@ -93,8 +109,13 @@ def register():
     bpy.types.Scene.decoratorSettings = bpy.props.PointerProperty(type=decorator.DecoratorSettings)
 
 
-# Unregister the add-on
+# Unregister the add-on -----------------------------------------------------------------------------------------------------------
 def unregister():
+    """
+    Unregister everything that have been registered upon disabling the add-on.
+    """
+    
+    # Delete settings
     
     try:
         del bpy.types.Scene.decoratorSettings
@@ -109,7 +130,8 @@ def unregister():
         except:
             # Don't panic, it was not registered at all
             pass
-    
-# Let you run registration without installing. You'll find the command in File > Export
+
+# Run w/o installation ############################################################################################################
+# Let you run registration without installing.
 if __name__ == "__main__":
     register()

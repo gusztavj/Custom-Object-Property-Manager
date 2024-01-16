@@ -37,6 +37,7 @@ This add-on is provided as-is. Use at your own risk. No warranties, no guarantee
 
 * This add-on may add and delete custom object properties based on your instructions.
 * This add-on is not intended to modify your objects and other Blender assets in any other way.
+* You shall be able to simply undo consequences made by this add-on.
 
 You may learn more about legal matters on page [https://github.com/gusztavj/Custom-Object-Property-Manager](https://github.com/gusztavj/Custom-Object-Property-Manager)
 

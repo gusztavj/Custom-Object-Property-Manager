@@ -35,6 +35,7 @@
 # no matter what happens. Still I tried to make sure no weird things happen:
 #   * This add-on may add and delete custom object properties based on your instructions.
 #   * This add-on is not intended to modify your objects and other Blender assets in any other way.
+#   * You shall be able to simply undo consequences made by this add-on.
 #
 # You may learn more about legal matters on page https://github.com/gusztavj/Custom-Object-Property-Manager
 #
@@ -199,7 +200,7 @@ class OBJECT_OT_DecoratorAdd(bpy.types.Operator):
     # Operator settings
     settings : DecoratorSettings = None        
 
-    # Constructor =================================================================================================================
+    # Lifecycle management ========================================================================================================
     def __init__(self):
         self.log = None
         self.settings = DecoratorSettings(self)
@@ -233,7 +234,7 @@ class OBJECT_OT_DecoratorExtend(bpy.types.Operator):
     # Operator settings
     settings : DecoratorSettings = None        
 
-    # Constructor =================================================================================================================
+    # Lifecycle management ========================================================================================================
     def __init__(self):
         self.log = None
         self.settings = DecoratorSettings(self)
@@ -267,7 +268,7 @@ class OBJECT_OT_DecoratorReset(bpy.types.Operator):
     # Operator settings
     settings : DecoratorSettings = None        
 
-    # Constructor =================================================================================================================
+    # Lifecycle management ========================================================================================================
     def __init__(self):
         self.log = None
         self.settings = DecoratorSettings(self)
@@ -314,7 +315,7 @@ class OBJECT_OT_DecoratorRemove(bpy.types.Operator):
     # Operator settings
     settings : DecoratorSettings = None        
 
-    # Constructor =================================================================================================================
+    # Lifecycle management ========================================================================================================
     def __init__(self):
         self.log = None
         self.settings = DecoratorSettings(self)
