@@ -12,6 +12,8 @@ Help, support, updates and anything else: [https://github.com/gusztavj/Custom-Ob
 
 ### Copyright
 
+This add-on has been created by [T1nk-R (https://github.com/gusztavj/)]((https://github.com/gusztavj/)).
+
 **Creative Commons CC BY-NC-SA:**
 
 * This license enables re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial purposes only, and only so long as attribution is given to the creator.
@@ -74,8 +76,8 @@ The panel looks like this:
 
 #### Take action
 
-* **Set.** Process all object in the scope, and 
-  * add the property to objects not yet having this property, and 
+* **Set.** Process all object in the scope, and
+  * add the property to objects not yet having this property, and
   * reset the property value to **Property Value** for objects already having this property.
 
 * **Extend.** Process all object in the scope, and add the property to objects not yet having this property. If an object already has this property, it's value won't be changed.
