@@ -35,7 +35,7 @@ This add-on has been created by [T1nk-R (https://github.com/gusztavj/)]((https:/
   * NC: Only noncommercial uses of the work are permitted.
   * SA: Adaptations must be shared under the same terms.
 
-**For commercial use**, please contact me via [janvari.gusztav@imprestige.biz](janvari.gusztav@imprestige.biz). Don't be scared of rigid contracts and high prices, above all I just want to know if this work is of your interest, and discuss options for commercial support and other services you may need.
+**For commercial use**, please contact me via [janvari.gusztav@imprestige.biz](mailto:janvari.gusztav@imprestige.biz). Don't be scared of rigid contracts and high prices, above all I just want to know if this work is of your interest, and discuss options for commercial support and other services you may need.
 
 Version: Please see the `version` tag under `bl_info` in `__init__.py`.
 
