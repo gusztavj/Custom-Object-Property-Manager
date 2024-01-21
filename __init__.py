@@ -1,7 +1,7 @@
 # T1nk-R's Custom Object Property Manager add-on for Blender
 # - part of T1nk-R Utilities for Blender
 #
-# This module responsible for managing add-on and settings lifecycle.
+# This module is responsible for managing add-on and settings lifecycle.
 #
 # Module and add-on authored by T1nk-R (https://github.com/gusztavj/)
 #
