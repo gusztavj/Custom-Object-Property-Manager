@@ -18,7 +18,7 @@ Help, support, updates and anything else: [https://github.com/gusztavj/Custom-Ob
 
 ### Copyright
 
-This add-on has been created by [T1nk-R (https://github.com/gusztavj/)]((https://github.com/gusztavj/)).
+This add-on has been created by [T1nk-R (https://github.com/gusztavj/)](https://github.com/gusztavj/).
 
 **Creative Commons CC BY-NC-SA:**
 
