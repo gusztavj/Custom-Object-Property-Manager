@@ -6,6 +6,10 @@ Part of **T1nk-R Utilities for Blender**
 
 You can use this add-on to add, edit and remove custom object properties for specific objects or in batches. You need Blender 3.3 or newer for this addon to work.
 
+But why on Earth would you want to manage custom object properties? Well, scripts and add-ons, such as [T1nk-R Focus Wizard](https://github.com/gusztavj/Focus-Wizard), another member of of **T1nk-R Utilities for Blender**, may make use of such properties to know what objects to process and how.
+
+You need Blender 3.3 or newer for this add-on to work.
+
 Help, support, updates and anything else: [https://github.com/gusztavj/Custom-Object-Property-Manager](https://github.com/gusztavj/Custom-Object-Property-Manager)
 
 ## Legal Stuff
