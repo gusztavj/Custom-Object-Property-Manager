@@ -2,6 +2,8 @@
 
 Part of **T1nk-R Utilities for Blender**
 
+![Alt text](art/repo-card--Custom-Object-Property-Manager.png)
+
 ## TL;DR
 
 You can use this add-on to add, edit and remove custom object properties for specific objects or in batches. You need Blender 3.3 or newer for this addon to work.
