@@ -44,7 +44,7 @@
 # Blender-specific properties #####################################################################################################
 
 bl_info = {
-    "name": "T1nk-R Custom Object Property Manager",
+    "name": "T1nk-R Custom Object Property Manager (T1nk-R Utilities)",
     "author": "T1nk-R (GusJ)",
     "version": (1, 0, 1),
     "blender": (3, 3, 0),

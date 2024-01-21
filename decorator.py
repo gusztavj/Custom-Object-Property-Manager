@@ -110,8 +110,9 @@ class DecoratorPanel(bpy.types.Panel):
     """
     # Blender-specific stuff
     bl_idname = "OBJECT_PT_t1nker_decorator_panel"
-    bl_label = "Custom Object Properties (T1nk-R Utilities)"
+    bl_label = "T1nk-R Custom Object Properties (T1nk-R Utilities)"
     bl_description = "Add, edit or remove custom object properties"
+    bl_location = "3D View -> Sidebar"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_category = "T1nk-R Utils"  # this is going to be the name of the tab
