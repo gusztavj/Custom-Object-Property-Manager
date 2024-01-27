@@ -13,6 +13,7 @@ But why on Earth would you want to manage custom object properties? Well, script
 You need Blender 3.3 or newer for this add-on to work.
 
 ![Tutorial on YouTube](art/tutorial.jpg)
+
 [View tutorial in T1nk-R's YouTube channel](https://youtu.be/d30eEzWqiQI)
 
 Help, support, updates and anything else: [https://github.com/gusztavj/Custom-Object-Property-Manager](https://github.com/gusztavj/Custom-Object-Property-Manager)
