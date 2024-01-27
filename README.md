@@ -2,6 +2,8 @@
 
 Part of **T1nk-R Utilities for Blender**
 
+Version: Please see the `version` tag under `bl_info` in `__init__.py`.
+
 ![Alt text](art/repo-card--Custom-Object-Property-Manager.png)
 
 ## TL;DR
@@ -24,24 +26,19 @@ Help, support, updates and anything else: [https://github.com/gusztavj/Custom-Ob
 
 This add-on has been created by [T1nk-R (https://github.com/gusztavj/)](https://github.com/gusztavj/).
 
-**Creative Commons CC BY-NC-SA:**
+#### MIT License
 
-* This license enables re-users to distribute, remix, adapt, and build upon the material in any medium or format for noncommercial purposes only, and only so long as attribution is given to the creator.
-* If you remix, adapt, or build upon the material, you must license the modified material under identical terms.
+Copyright (c) 2023, T1nk-R (Gusztáv Jánvári)
 
-* CC BY-NC-SA includes the following elements:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-  * BY: credit must be given to the creator.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-    Credit text:
-    > Original addon created by: T1nk-R - [janvari.gusztav@imprestige.biz](mailto:janvari.gusztav@imprestige.biz) / [https://github.com/gusztavj](https://github.com/gusztavj)
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-  * NC: Only noncommercial uses of the work are permitted.
-  * SA: Adaptations must be shared under the same terms.
+#### Commercial Use
 
-**For commercial use**, please contact me via [janvari.gusztav@imprestige.biz](mailto:janvari.gusztav@imprestige.biz). Don't be scared of rigid contracts and high prices, above all I just want to know if this work is of your interest, and discuss options for commercial support and other services you may need.
-
-Version: Please see the `version` tag under `bl_info` in `__init__.py`.
+I would highly appreciate to get notified via [janvari.gusztav@imprestige.biz](mailto:janvari.gusztav@imprestige.biz) about any such usage. I would be happy to learn this work is of your interest, and to discuss options for commercial support and other services you may need.
 
 ### Disclaimer
 
