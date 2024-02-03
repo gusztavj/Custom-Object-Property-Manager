@@ -16,7 +16,7 @@
 #
 # ** MIT License **
 # 
-# Copyright (c) 2023, T1nk-R (Gusztáv Jánvári)
+# Copyright (c) 2023-2024, T1nk-R (Gusztáv Jánvári)
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
 # (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, 
@@ -47,12 +47,14 @@
 #
 # *********************************************************************************************************************************
 
+from datetime import datetime
 from enum import Enum
 import bpy
 
-# An enum for operating modes =====================================================================================================
+# Enum for operating modes ########################################################################################################
 class DecoratorWorkerModes(Enum):
-    """An enum for operating modes
+    """
+    An enum for operating modes.
     """
     Add = 1,
     Remove = 2,
@@ -60,14 +62,15 @@ class DecoratorWorkerModes(Enum):
     Extend = 4
 
     
-# Container for the algorithm to to addition/deletion of object properties ========================================================
+# Container for the algorithm of supported operations #############################################################################
 class DecoratorWorker:
     """
-    Container for the algorithm to to addition/deletion of object properties.
+    Container for the algorithm of supported operations.
     """
     
     def processObjects(self, context, action: DecoratorWorkerModes): 
-        """Process objects scoped by the decoratorSettings properties of context.scene, and add or delete a custom property,
+        """
+        Process objects scoped by the decoratorSettings properties of context.scene, and add or delete a custom property,
         as controlled by action.
 
         Args:
@@ -78,6 +81,16 @@ class DecoratorWorker:
         Returns:
             Operator Return Items: One of the values specified at https://docs.blender.org/api/current/bpy_types_enum_items/operator_return_items.html#rna-enum-operator-return-items
         """
+        operationStarted = f"{datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')}"
+        
+        status = None
+        summary = ""
+        
+        print("")
+        print("")
+        print(f"=" * 80)
+        print(f"T1nk-R Custom Object Property Manager started ({operationStarted})")
+        print(f"-" * 80)
         
         # Big try block to make sure we terminate gracefully
         
@@ -218,16 +231,26 @@ class DecoratorWorker:
                             pass
             
             # Make a note of peaceful completion
-            if settings.isTestOnly:
-                print(f"Processing finished, {changed} items would have been affected if this wasn't a test")
-            else:
-                print(f"Processing finished, {changed} items affected")
+            summary = \
+                f"Processing finished, {changed} items would have been affected if this weren't a test" \
+                if settings.isTestOnly else \
+                f"Processing finished, {changed} items affected"
             
         except Exception as ex:
-            print(ex)
+            print(f"{ex}")
+            self.report({'ERROR'}, f"{ex}")
+            status = {'CANCELLED'}
         finally:
             # Restore active and selected flags
             viewLayer.objects.active = activeObject
-            print(f"Property creation process exited")
-
-        return {'FINISHED'}
+            self.report({'INFO'}, summary)
+            
+            print("")
+            print(f"-" * 80)        
+            print(summary)
+            print(f"-" * 80)
+            print(f"T1nk-R Custom Object Property Manager finished")                                            
+            print(f"=" * 80)
+            print("")
+        
+        return status

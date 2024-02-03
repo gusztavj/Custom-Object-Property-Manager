@@ -16,7 +16,7 @@
 #
 # ** MIT License **
 # 
-# Copyright (c) 2023, T1nk-R (Gusztáv Jánvári)
+# Copyright (c) 2023-2024, T1nk-R (Gusztáv Jánvári)
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
 # (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, 
@@ -53,11 +53,14 @@ import bpy
 from bpy.props import StringProperty, BoolProperty
 from . import decoratorworker
 
+# Addon preferences ###############################################################################################################
 class DecoratorSettings(bpy.types.PropertyGroup):
+    """
+    Settings for the T1nk-R Custom Object Property Manager add-on.
+    """
     
     # Properties ==================================================================================================================
 
-    # Controls whether to process selected objects or all 
     affectSelectedObjectsOnly: BoolProperty(
         name="Only process selected objects",
         description="If unchecked, it will process all of your visible objects",
@@ -67,7 +70,6 @@ class DecoratorSettings(bpy.types.PropertyGroup):
     Controls whether to process selected objects or all.
     """
     
-    # The name of the property to add or remove
     propertyName: StringProperty(
         name="Property Name",
         description="Specify the name of the property to add or remove",
@@ -77,7 +79,6 @@ class DecoratorSettings(bpy.types.PropertyGroup):
     The name of the property to add or remove.
     """
     
-    # The name of the property to add or remove
     propertyValue: StringProperty(
         name="Property Value",
         description="The default value to set for the property (only if the property does not exist)",
@@ -87,7 +88,6 @@ class DecoratorSettings(bpy.types.PropertyGroup):
     The name of the property to add or remove.
     """
 
-    # Controls log verbosity.
     isVerbose: BoolProperty(
         name="Verbose mode",
         description="Check to get a detailed log on what happened and what not. Non-verbose mode only reports what actually happened.",
@@ -97,7 +97,6 @@ class DecoratorSettings(bpy.types.PropertyGroup):
     Controls log verbosity.
     """
     
-    # Controls if actions are actually taken or just simulated.
     isTestOnly: BoolProperty(        
         name="Just a test", 
         description="Don't do anything, just show what you would do",
@@ -106,15 +105,16 @@ class DecoratorSettings(bpy.types.PropertyGroup):
     """
     Controls if actions are actually taken or just simulated.
     """
-    
 
-
-
-# Control panel to show in Blender's viewport, in the 'N' toolbar =================================================================
+# Panel for the UI ################################################################################################################
 class DecoratorPanel(bpy.types.Panel):
-    """Control panel to show in Blender's viewport, in the 'N' toolbar
     """
-    # Blender-specific stuff
+    Panel on the sidebar (N) to add, edit or remove custom object properties
+    """
+    
+    # Properties ==================================================================================================================
+    
+    # Blender-specific stuff ------------------------------------------------------------------------------------------------------    
     bl_idname = "OBJECT_PT_t1nker_decorator_panel"
     bl_label = "T1nk-R Custom Object Properties (T1nk-R Utilities)"
     bl_description = "Add, edit or remove custom object properties"
@@ -123,9 +123,12 @@ class DecoratorPanel(bpy.types.Panel):
     bl_region_type = "UI"
     bl_category = "T1nk-R Utils"  # this is going to be the name of the tab
 
-    # Draw the panel  =============================================================================================================  
+    # Public functions ============================================================================================================
+
+    # Draw the panel  -------------------------------------------------------------------------------------------------------------
     def draw(self, context: bpy.types.Context):
-        """Draws the panel.
+        """
+        Draws the panel.
 
         Args:
             context (Context): A bpy.context object passed by Blender.
@@ -137,9 +140,9 @@ class DecoratorPanel(bpy.types.Panel):
         # We'll create boxes with rows for the various settings
         
         layout = self.layout
+                
         
-        
-        
+        # Scope
         box = layout.box()
                     
         row = box.row(align=True)
@@ -149,7 +152,7 @@ class DecoratorPanel(bpy.types.Panel):
         row.prop(self.settings, "affectSelectedObjectsOnly")
         
         
-        
+        # Property name and value
         box = layout.box()
                 
         row = box.row(align=True)
@@ -164,6 +167,8 @@ class DecoratorPanel(bpy.types.Panel):
         row = box.row(align=True)
         row.prop(self.settings, "propertyValue")
         
+        
+        # Operation settings
         box = layout.box()
         
         row = box.row(align=True)
@@ -176,7 +181,7 @@ class DecoratorPanel(bpy.types.Panel):
         row.prop(self.settings, "isTestOnly")  
 
 
-
+        # Action section
         box = layout.box()
         
         row = box.row(align=True)
@@ -197,31 +202,55 @@ class DecoratorPanel(bpy.types.Panel):
         col.operator("t1nker.object_property_manager_remove", text="Remove", icon="REMOVE")
         
 
-# Operator to add a custom object property with a custom default value
+# Operator to add a property ######################################################################################################
 class OBJECT_OT_DecoratorAdd(bpy.types.Operator):    
-    """Add the custom object property to objects. If the property exists for an object, its value will be reset to the value specified above"""
+    """
+    Add the custom object property to objects. If the property exists for an object, its value will be reset to the value 
+    specified above.
+    """
+    
+    # Properties ==================================================================================================================
+    
+    # Blender-specific stuff ------------------------------------------------------------------------------------------------------    
     bl_idname = "t1nker.object_property_manager_add"
     bl_label = "Add custom object property"
     bl_options = {'REGISTER', 'UNDO'}    
     
-    # Operator settings
-    settings : DecoratorSettings = None        
-
     # Lifecycle management ========================================================================================================
-    def __init__(self):
-        self.log = None
-        self.settings = DecoratorSettings(self)
     
-    # See if the operation can run ================================================================================================
+    # Initialize object -----------------------------------------------------------------------------------------------------------
+    def __init__(self):
+        """
+        Make an instance and create a scene-level copy of the settings.
+        """
+        
+        self.settings = DecoratorSettings(self)
+        """
+        Copy of the operator settings specific to the Blender file (scene)
+        """
+    
+    # Public functions ============================================================================================================
+    
+    # See if the operation can run ------------------------------------------------------------------------------------------------
     @classmethod
     def poll(cls, context):
-        # Return true if the current Blend file is saved and we are in object mode, not in some edit mode 
-        # (being in a non-object mode would prevent creating doubles of objects for pre-export manipulation)
+        """
+        Tell if the operator can run.
+
+        Args:
+            context (bpy.types.Context): A context object passed on by Blender for the current context.
+
+        Returns:
+            bool: `True` if the operator can run, `False` otherwise.
+        """
+        
+        # Return true if the user is in object mode, false otherwise
         return context.mode == 'OBJECT'
     
-    # Here is the core stuff ======================================================================================================
+    # Perform the operation -------------------------------------------------------------------------------------------------------
     def execute(self, context): 
-        """Execute the operator
+        """
+        Execute the operator
         """                     
         
         # We just need to run the worker with the context and the proper operation mode (addition here)
@@ -231,79 +260,110 @@ class OBJECT_OT_DecoratorAdd(bpy.types.Operator):
         
         return opResult
     
-# Operator to add a custom object property with a custom default value
+# Operator to extend a property ###################################################################################################
 class OBJECT_OT_DecoratorExtend(bpy.types.Operator):    
-    """Add the custom object property to objects currently not having it. If the property exists for an object, its value won't be changed"""
+    """
+    Add the custom object property to objects currently not having it. 
+    If the property exists for an object, its value won't be changed.
+    """
+    # Properties ==================================================================================================================
+    
+    # Blender-specific stuff ------------------------------------------------------------------------------------------------------    
     bl_idname = "t1nker.object_property_manager_extend"
     bl_label = "Extend custom object property"
     bl_options = {'REGISTER', 'UNDO'}    
     
-    # Operator settings
-    settings : DecoratorSettings = None        
-
     # Lifecycle management ========================================================================================================
-    def __init__(self):
-        self.log = None
-        self.settings = DecoratorSettings(self)
     
-    # See if the operation can run ================================================================================================
+    # Initialize object -----------------------------------------------------------------------------------------------------------
+    def __init__(self):
+        """
+        Make an instance and create a scene-level copy of the settings.
+        """
+        
+        self.settings = DecoratorSettings(self)
+        """
+        Copy of the operator settings specific to the Blender file (scene)
+        """
+    
+    # See if the operation can run ------------------------------------------------------------------------------------------------
     @classmethod
     def poll(cls, context):
-        # Return true if the current Blend file is saved and we are in object mode, not in some edit mode 
-        # (being in a non-object mode would prevent creating doubles of objects for pre-export manipulation)
+        """
+        Tell if the operator can run.
+
+        Args:
+            context (bpy.types.Context): A context object passed on by Blender for the current context.
+
+        Returns:
+            bool: `True` if the operator can run, `False` otherwise.
+        """
+        
+        # Return true if the user is in object mode, false otherwise
         return context.mode == 'OBJECT'
     
-    # Here is the core stuff ======================================================================================================
+    # Perform the operation -------------------------------------------------------------------------------------------------------
     def execute(self, context): 
-        """Execute the operator
+        """
+        Execute the operator
         """                     
         
-        # We just need to run the worker with the context and the proper operation mode (addition here)
+        # We just need to run the worker with the context and the proper operation mode (extension here)
         
         dw = decoratorworker.DecoratorWorker()
         opResult = dw.processObjects(context = context, action = decoratorworker.DecoratorWorkerModes.Extend)
         
         return opResult
     
-# Operator to remove a custom object property
+# Operator to reset a property ####################################################################################################
 class OBJECT_OT_DecoratorReset(bpy.types.Operator):    
-    """Reset the custom object property to the value specified above. Only objects having this property will be affected. If an object does not have this property now, it won't be added"""
+    """
+    Reset the custom object property to the value specified above. Only objects having this property will be affected. 
+    If an object does not have this property now, it won't be added.
+    """
+    
+    # Properties ==================================================================================================================
+    
+    # Blender-specific stuff ------------------------------------------------------------------------------------------------------    
     bl_idname = "t1nker.object_property_manager_reset"
     bl_label = "Reset custom object property"
     bl_options = {'REGISTER', 'UNDO'}    
-    
-    # Operator settings
-    settings : DecoratorSettings = None        
 
     # Lifecycle management ========================================================================================================
-    def __init__(self):
-        self.log = None
-        self.settings = DecoratorSettings(self)
     
-    # See if the operation can run ================================================================================================
+    # Initialize object -----------------------------------------------------------------------------------------------------------
+    def __init__(self):
+        """
+        Make an instance and create a scene-level copy of the settings.
+        """
+        
+        self.settings = DecoratorSettings(self)
+        """
+        Copy of the operator settings specific to the Blender file (scene)
+        """
+    
+    # See if the operation can run ------------------------------------------------------------------------------------------------
     @classmethod
     def poll(cls, context):
-        # Return true if the current Blend file is saved and we are in object mode, not in some edit mode 
-        # (being in a non-object mode would prevent creating doubles of objects for pre-export manipulation)
+        """
+        Tell if the operator can run.
+
+        Args:
+            context (bpy.types.Context): A context object passed on by Blender for the current context.
+
+        Returns:
+            bool: `True` if the operator can run, `False` otherwise.
+        """
+        
+        # Return true if the user is in object mode, false otherwise
         return context.mode == 'OBJECT'
     
-    # Show the export dialog ======================================================================================================
-    def invoke(self, context, event):
-        
-        # For first run in the session, load addon defaults (otherwise use values set previously in the session)
-        if self.settings is None:
-            self.settings = context.preferences.addons[__package__].preferences.settings
-
-        # Show export dialog
-        result = context.window_manager.invoke_props_dialog(self, width=400)
-        
-        return result
-
-    # Here is the core stuff ======================================================================================================
+    # Perform the operation -------------------------------------------------------------------------------------------------------
     def execute(self, context): 
-        """Execute the operator
+        """
+        Execute the operator
         """                     
-        # We just need to run the worker with the context and the proper operation mode (removal here)
+        # We just need to run the worker with the context and the proper operation mode (reset here)
         
         dw = decoratorworker.DecoratorWorker()
         opResult = dw.processObjects(context = context, action = decoratorworker.DecoratorWorkerModes.Reset)
@@ -312,41 +372,61 @@ class OBJECT_OT_DecoratorReset(bpy.types.Operator):
     
 
     
-# Operator to remove a custom object property
+# Operator to remove a property ###################################################################################################
 class OBJECT_OT_DecoratorRemove(bpy.types.Operator):    
-    """Remove the custom object property named above"""
+    """
+    Remove the custom object property named above.
+    """
+    
+    # Properties ==================================================================================================================
+    
+    # Blender-specific stuff ------------------------------------------------------------------------------------------------------    
     bl_idname = "t1nker.object_property_manager_remove"
     bl_label = "Remove custom object property"
     bl_options = {'REGISTER', 'UNDO'}    
     
-    # Operator settings
-    settings : DecoratorSettings = None        
-
     # Lifecycle management ========================================================================================================
-    def __init__(self):
-        self.log = None
-        self.settings = DecoratorSettings(self)
     
-    # See if the operation can run ================================================================================================
+    # Initialize object -----------------------------------------------------------------------------------------------------------
+    def __init__(self):
+        """
+        Make an instance and create a scene-level copy of the settings.
+        """
+        
+        self.settings = DecoratorSettings(self)
+        """
+        Copy of the operator settings specific to the Blender file (scene)
+        """
+    
+    # See if the operation can run ------------------------------------------------------------------------------------------------
+    def __init__(self):
+        """
+        Make an instance and create a scene-level copy of the settings.
+        """
+        
+        self.settings = DecoratorSettings(self)
+        """
+        Copy of the operator settings specific to the Blender file (scene)
+        """
+    
+    # See if the operation can run ------------------------------------------------------------------------------------------------
     @classmethod
     def poll(cls, context):
-        # Return true if the current Blend file is saved and we are in object mode, not in some edit mode 
-        # (being in a non-object mode would prevent creating doubles of objects for pre-export manipulation)
+        """
+        Tell if the operator can run.
+
+        Args:
+            context (bpy.types.Context): A context object passed on by Blender for the current context.
+
+        Returns:
+            bool: `True` if the operator can run, `False` otherwise.
+        """
+        
+        # Return true if the user is in object mode, false otherwise
+        
         return context.mode == 'OBJECT'
     
-    # Show the export dialog ======================================================================================================
-    def invoke(self, context, event):
-        
-        # For first run in the session, load addon defaults (otherwise use values set previously in the session)
-        if self.settings is None:
-            self.settings = context.preferences.addons[__package__].preferences.settings
-
-        # Show export dialog
-        result = context.window_manager.invoke_props_dialog(self, width=400)
-        
-        return result
-
-    # Here is the core stuff ======================================================================================================
+    # Perform the operation -------------------------------------------------------------------------------------------------------
     def execute(self, context): 
         """Execute the operator
         """                     
