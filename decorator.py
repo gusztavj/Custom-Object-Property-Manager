@@ -52,6 +52,7 @@
 import bpy
 from bpy.props import StringProperty, BoolProperty
 from . import decoratorworker
+from . import updateChecker
 
 # Addon preferences ###############################################################################################################
 class DecoratorSettings(bpy.types.PropertyGroup):
@@ -104,6 +105,26 @@ class DecoratorSettings(bpy.types.PropertyGroup):
     )    
     """
     Controls if actions are actually taken or just simulated.
+    """
+    
+# Addon preferences ###############################################################################################################
+class T1nkerDecoratorAddonPreferences(bpy.types.AddonPreferences):    
+    """
+    Preferences of the add-on.
+    """
+    
+    # Properties required by Blender ==============================================================================================
+    bl_idname = __package__
+    """
+    Blender's ID name for it to know to which add-on this class belongs. This must match the add-on name, 
+    so '__package__' shall be used when defining this in a submodule of a python package.
+    """
+    
+    # Other properties ============================================================================================================
+    
+    updateInfo: bpy.props.PointerProperty(type=updateChecker.T1nkerDecoratorUpdateInfo)
+    """
+    Information about the current version and the latest available
     """
 
 # Panel for the UI ################################################################################################################
@@ -201,6 +222,34 @@ class DecoratorPanel(bpy.types.Panel):
         col.operator("t1nker.object_property_manager_reset", text="Reset", icon="FILE_REFRESH")        
         col.operator("t1nker.object_property_manager_remove", text="Remove", icon="REMOVE")
         
+        
+        # Update available button
+        #
+        
+        try:
+            updateInfo = context.preferences.addons[__package__].preferences.updateInfo
+            
+            # Note that checking update is part of executing the main operator, that is, performing at least
+            # one synchronization. Until that no updates will be detected. Updates are not checked each time
+            # this dialog is drawn, but as set in `updateInfo.T1nkerDecoratorUpdateInfo.checkFrequencyDays`.
+            if updateInfo.updateAvailable:
+                box = layout.box()
+                
+                row = box.row(align=True)
+                
+                row.label(text="Update available")
+                
+                # Update button            
+                opUpdate = box.row().operator(
+                        'wm.url_open',
+                        text=f"Get new version",
+                        icon='URL'
+                        )            
+                opUpdate.url = updateChecker.RepoInfo.repoReleasesUrl
+                box.row().label(text=f"You can update from {updateInfo.currentVersion} to {updateInfo.latestVersion}")
+        except:
+            # Fail silently if we cannot check for updates or draw the UI
+            pass    
 
 # Operator to add a property ######################################################################################################
 class OBJECT_OT_DecoratorAdd(bpy.types.Operator):    
@@ -249,6 +298,14 @@ class OBJECT_OT_DecoratorAdd(bpy.types.Operator):
         """
         Execute the operator
         """                     
+        
+        # Call the update checker to check for updates time to time, as specified in 
+        # `updateInfo.T1nkerDecoratorUpdateInfo.checkFrequencyDays`
+        try:
+            bpy.ops.t1nker.decoratorupdatechecker()            
+        except:
+            # Don't mess up anything if update checking doesn't work, just ignore the error
+            pass
         
         # We just need to run the worker with the context and the proper operation mode (addition here)
         
@@ -307,6 +364,14 @@ class OBJECT_OT_DecoratorExtend(bpy.types.Operator):
         Execute the operator
         """                     
         
+        # Call the update checker to check for updates time to time, as specified in 
+        # `updateInfo.T1nkerDecoratorUpdateInfo.checkFrequencyDays`
+        try:
+            bpy.ops.t1nker.decoratorupdatechecker()            
+        except:
+            # Don't mess up anything if update checking doesn't work, just ignore the error
+            pass
+        
         # We just need to run the worker with the context and the proper operation mode (extension here)
         
         dw = decoratorworker.DecoratorWorker()
@@ -363,7 +428,16 @@ class OBJECT_OT_DecoratorReset(bpy.types.Operator):
     def execute(self, context): 
         """
         Execute the operator
-        """                     
+        """     
+        
+        # Call the update checker to check for updates time to time, as specified in 
+        # `updateInfo.T1nkerDecoratorUpdateInfo.checkFrequencyDays`
+        try:
+            bpy.ops.t1nker.decoratorupdatechecker()            
+        except:
+            # Don't mess up anything if update checking doesn't work, just ignore the error
+            pass
+                        
         # We just need to run the worker with the context and the proper operation mode (reset here)
         
         dw = decoratorworker.DecoratorWorker()
@@ -432,8 +506,16 @@ class OBJECT_OT_DecoratorRemove(bpy.types.Operator):
     
     # Perform the operation -------------------------------------------------------------------------------------------------------
     def execute(self, context): 
-        """Execute the operator
-        """                     
+        """Execute the operator"""     
+        
+        # Call the update checker to check for updates time to time, as specified in 
+        # `updateInfo.T1nkerDecoratorUpdateInfo.checkFrequencyDays`
+        try:
+            bpy.ops.t1nker.decoratorupdatechecker()            
+        except:
+            # Don't mess up anything if update checking doesn't work, just ignore the error
+            pass
+                        
         # We just need to run the worker with the context and the proper operation mode (removal here)
         
         dw = decoratorworker.DecoratorWorker()

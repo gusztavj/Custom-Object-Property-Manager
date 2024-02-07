@@ -66,7 +66,7 @@ if "bpy" in locals():
     from importlib import reload
 
     # Our own libraries
-    libs = [decorator, decoratorworker]
+    libs = [updateChecker, decorator, decoratorworker]
     
     for lib in libs:        
         try:
@@ -78,13 +78,17 @@ if "bpy" in locals():
 
 # Library imports -----------------------------------------------------------------------------------------------------------------
 import bpy
+from . import updateChecker
 from . import decorator
 from . import decoratorworker
 
 # Properties ######################################################################################################################
 
 classes = [
-    decorator.DecoratorSettings,
+    updateChecker.T1nkerDecoratorUpdateInfo,
+    updateChecker.T1NKER_OT_DecoratorUpdateChecker,
+    decorator.T1nkerDecoratorAddonPreferences,
+    decorator.DecoratorSettings,    
     decorator.DecoratorPanel,
     decorator.OBJECT_OT_DecoratorAdd,
     decorator.OBJECT_OT_DecoratorExtend,
