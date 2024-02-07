@@ -82,7 +82,7 @@ class RepoInfo:
     username = "gusztavj"
     """My username for API access"""
     
-    token = "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"
+    token = "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"
     """A token restricted only to read code from Blender add-on repos (public anyway)"""
     
 # Structured update info ##########################################################################################################
