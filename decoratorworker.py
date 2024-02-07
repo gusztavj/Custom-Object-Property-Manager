@@ -143,11 +143,11 @@ class DecoratorWorker:
                     match action:
                         
                         case DecoratorWorkerModes.Add: # addition requested                           
-                            print(f"\tResetting property value for {object.name}")
+                            print(f"\tResetting property value for '{object.name}'")
                             
                             # The property already exists, don't need to re-add
                             if settings.isVerbose:
-                                print(f"\tProperty already exists on {object.name} with a value of '{object[settings.propertyName]}', will be reset")
+                                print(f"\tProperty already exists on '{object.name}' with a value of '{object[settings.propertyName]}', will be reset")
                                 
                             if settings.isTestOnly:                                
                                 print(f"\t\t-- Relax, nothing is done as this is just a test")
@@ -157,17 +157,17 @@ class DecoratorWorker:
                         case DecoratorWorkerModes.Extend: # extension requested
                             # The property already exists, don't need to re-add
                             if settings.isVerbose:
-                                print(f"\tProperty already exists on {object.name} with a value of '{object[settings.propertyName]}', and it won't be reset")
+                                print(f"\tProperty already exists on '{object.name}' with a value of '{object[settings.propertyName]}', and it won't be reset")
                         
                         case DecoratorWorkerModes.Reset: # reset value to default
                             # The property already exists, revert its value to the default
-                            print(f"\tResetting property value for {object.name}")                            
+                            print(f"\tResetting property value for '{object.name}'")                            
                             
                             if settings.isVerbose:
                                 if object[settings.propertyName] == settings.propertyValue:
-                                    print(f"\tProperty already exists on {object.name} with a value of '{object[settings.propertyName]}', will be reset")
+                                    print(f"\tProperty already exists on '{object.name}' with a value of '{object[settings.propertyName]}', will be reset")
                                 else:
-                                    print(f"\tProperty already exists on {object.name}, and is now reset")
+                                    print(f"\tProperty already exists on '{object.name}', and is now reset")
                             
                             if settings.isTestOnly:                                
                                 print(f"\t\t-- Relax, nothing is done as this is just a test")
@@ -176,7 +176,7 @@ class DecoratorWorker:
                                                     
                         case DecoratorWorkerModes.Remove: # removal requested
                             # The property exists, needs to be removed
-                            print(f"\tRemoving property from {object.name}")
+                            print(f"\tRemoving property from '{object.name}'")
                             
                             if settings.isTestOnly:                                
                                 print(f"\t\t-- Relax, nothing is done as this is just a test")    
@@ -196,7 +196,7 @@ class DecoratorWorker:
                         
                         case DecoratorWorkerModes.Add: # addition requested
                             # This object doesn't have this property, let's add it
-                            print(f"\tAdding property to {object.name}")
+                            print(f"\tAdding property to '{object.name}'")
                             
                             if settings.isTestOnly:                                
                                 print(f"\t\t-- Relax, nothing is done as this is just a test")    
@@ -207,7 +207,7 @@ class DecoratorWorker:
                             
                         case DecoratorWorkerModes.Extend: # addition requested
                             # This object doesn't have this property, let's add it
-                            print(f"\tAdding property to {object.name}")
+                            print(f"\tAdding property to '{object.name}'")
                             
                             if settings.isTestOnly:                                
                                 print(f"\t\t-- Relax, nothing is done as this is just a test")    
@@ -219,12 +219,12 @@ class DecoratorWorker:
                         case DecoratorWorkerModes.Remove: # removal requested
                             # This object doesn't have this property, there's nothing to reset
                             if settings.isVerbose:
-                                print(f"\tObject {object.name} doesn't have this property, therefore there's nothing to reset")
+                                print(f"\tObject '{object.name}' doesn't have this property, therefore there's nothing to reset")
                                     
                         case DecoratorWorkerModes.Remove: # removal requested
                             # This object doesn't have this property, there's nothing to remove
                             if settings.isVerbose:
-                                print(f"\tObject {object.name} doesn't have this property, therefore there's nothing to remove")
+                                print(f"\tObject '{object.name}' doesn't have this property, therefore there's nothing to remove")
                         
                         case _:
                             # Do nothing, it may happen that nothing has to be made on this code branch with a specific operation mode
@@ -235,15 +235,15 @@ class DecoratorWorker:
                 f"Processing finished, {changed} items would have been affected if this weren't a test" \
                 if settings.isTestOnly else \
                 f"Processing finished, {changed} items affected"
+                
+            status = {'FINISHED'}
             
         except Exception as ex:
-            print(f"{ex}")
-            self.report({'ERROR'}, f"{ex}")
+            summary = f"An error occurred: {ex}"
             status = {'CANCELLED'}
         finally:
             # Restore active and selected flags
             viewLayer.objects.active = activeObject
-            self.report({'INFO'}, summary)
             
             print("")
             print(f"-" * 80)        
@@ -253,4 +253,4 @@ class DecoratorWorker:
             print(f"=" * 80)
             print("")
         
-        return status
+        return (status, summary)

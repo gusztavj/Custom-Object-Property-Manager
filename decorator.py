@@ -204,10 +204,7 @@ class DecoratorPanel(bpy.types.Panel):
 
 # Operator to add a property ######################################################################################################
 class OBJECT_OT_DecoratorAdd(bpy.types.Operator):    
-    """
-    Add the custom object property to objects. If the property exists for an object, its value will be reset to the value 
-    specified above.
-    """
+    """Add the custom object property to objects. If the property exists for an object, its value will be reset to the value specified above"""
     
     # Properties ==================================================================================================================
     
@@ -256,16 +253,18 @@ class OBJECT_OT_DecoratorAdd(bpy.types.Operator):
         # We just need to run the worker with the context and the proper operation mode (addition here)
         
         dw = decoratorworker.DecoratorWorker()
-        opResult = dw.processObjects(context = context, action = decoratorworker.DecoratorWorkerModes.Add)
+        (opResult, report) = dw.processObjects(context = context, action = decoratorworker.DecoratorWorkerModes.Add)
         
+        if opResult == {'FINISHED'}:
+            self.report({'INFO'}, report)
+        else:
+            self.report({'ERROR'}, report)
+
         return opResult
     
 # Operator to extend a property ###################################################################################################
 class OBJECT_OT_DecoratorExtend(bpy.types.Operator):    
-    """
-    Add the custom object property to objects currently not having it. 
-    If the property exists for an object, its value won't be changed.
-    """
+    """Add the custom object property to objects currently not having it. If the property exists for an object, its value won't be changed"""
     # Properties ==================================================================================================================
     
     # Blender-specific stuff ------------------------------------------------------------------------------------------------------    
@@ -311,16 +310,18 @@ class OBJECT_OT_DecoratorExtend(bpy.types.Operator):
         # We just need to run the worker with the context and the proper operation mode (extension here)
         
         dw = decoratorworker.DecoratorWorker()
-        opResult = dw.processObjects(context = context, action = decoratorworker.DecoratorWorkerModes.Extend)
+        (opResult, report) = dw.processObjects(context = context, action = decoratorworker.DecoratorWorkerModes.Extend)
+        
+        if opResult == {'FINISHED'}:
+            self.report({'INFO'}, report)
+        else:
+            self.report({'ERROR'}, report)
         
         return opResult
     
 # Operator to reset a property ####################################################################################################
 class OBJECT_OT_DecoratorReset(bpy.types.Operator):    
-    """
-    Reset the custom object property to the value specified above. Only objects having this property will be affected. 
-    If an object does not have this property now, it won't be added.
-    """
+    """Reset the custom object property to the value specified above. Only objects having this property will be affected. If an object does not have this property now, it won't be added"""
     
     # Properties ==================================================================================================================
     
@@ -366,17 +367,20 @@ class OBJECT_OT_DecoratorReset(bpy.types.Operator):
         # We just need to run the worker with the context and the proper operation mode (reset here)
         
         dw = decoratorworker.DecoratorWorker()
-        opResult = dw.processObjects(context = context, action = decoratorworker.DecoratorWorkerModes.Reset)
+        (opResult, report) = dw.processObjects(context = context, action = decoratorworker.DecoratorWorkerModes.Reset)
         
+        if opResult == {'FINISHED'}:
+            self.report({'INFO'}, report)
+        else:
+            self.report({'ERROR'}, report)
+            
         return opResult    
     
 
     
 # Operator to remove a property ###################################################################################################
 class OBJECT_OT_DecoratorRemove(bpy.types.Operator):    
-    """
-    Remove the custom object property named above.
-    """
+    """Remove the custom object property named above"""
     
     # Properties ==================================================================================================================
     
@@ -433,7 +437,12 @@ class OBJECT_OT_DecoratorRemove(bpy.types.Operator):
         # We just need to run the worker with the context and the proper operation mode (removal here)
         
         dw = decoratorworker.DecoratorWorker()
-        opResult = dw.processObjects(context = context, action = decoratorworker.DecoratorWorkerModes.Remove)
+        (opResult, report) = dw.processObjects(context = context, action = decoratorworker.DecoratorWorkerModes.Remove)
+        
+        if opResult == {'FINISHED'}:
+            self.report({'INFO'}, report)
+        else:
+            self.report({'ERROR'}, report)
         
         return opResult    
     
